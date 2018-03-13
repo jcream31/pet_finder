@@ -2,7 +2,6 @@ import time
 import getpass
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.by import By
 # import pandas as pd
 
 ShelterPetFinderId = input("Enter your shelter id: ")
@@ -54,16 +53,25 @@ browser.find_element_by_name('ctl00$cphSearchArea$ctrlAnimal$ctrlAnimalSearch$bt
 select_dropdown('cphSearchArea_ctrlAnimal_ctrlAnimalSearch_dgFoundItems_ddlPS',
                 'All')
 
-# columns =
-i = 0
+table = browser.find_element_by_xpath("//table[@id='cphSearchArea_ctrlAnimal_ctrlAnimalSearch_dgFoundItems']")
+i = 1
+col_names = []
 while True:
     try:
-        print(browser.find_element_by_xpath("//table[@id='cphSearchArea_ctrlAnimal_ctrlAnimalSearch_dgFoundItems']/tbody/tr/td[{}]/a".format(i)).text)
+        col = table.find_element_by_xpath(".//tbody/tr/td[{0}]/a".format(i)).text
+        col_names.append(col)
         i+=1
     except:
         print("Done reading header")
         break
 
-# browser.find_element_by_name('ctl00$cphSearchArea$ctrlAnimal$ctrlAnimalSearch$btnFind').click()
-
+data_dict = {}
+for row_num, row in enumerate(table.find_elements_by_xpath(".//tr")):
+    row_data = [td.text for td in row.find_elements_by_xpath(".//td[text()]")]
+    row_data = ['NA' if i==' ' else i for i in row_data]
+    if len(row_data)==0:
+        continue
+    else:
+        data = dict(zip(col_names, row_data))
+        data_dict.update({'row_{}'.format(row_num): data})
 # browser.quit()
