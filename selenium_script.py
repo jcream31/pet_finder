@@ -1,4 +1,5 @@
 import time
+import getpass
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
@@ -6,7 +7,7 @@ from selenium.webdriver.common.by import By
 
 ShelterPetFinderId = input("Enter your shelter id: ")
 UserName = input("Enter your user name: ")
-Password = input("Enter your password: ")
+Password = getpass.getpass("Enter your password: ")
 
 ######################################################
 # LOGIN ##############################################
